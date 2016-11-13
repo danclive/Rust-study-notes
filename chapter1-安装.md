@@ -62,7 +62,7 @@ $ cd hello_world
 
 然后使用喜欢的编辑器，创建一个叫做 `main.rs` 的源文件。Rust 代码文件使用 `.rs` 作为后缀，如果文件名由多个单词组成，使用下划线分割它们，例如`hello_world.rs`。在刚刚创建的`main.rs` 文件，输入如下代码：
 
-```
+```rust
 fn main() {
     println!("Hello, world!");
 }
