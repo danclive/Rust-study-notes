@@ -76,4 +76,33 @@ Hello, world!
 
 #### 基于 Cargo 的 Rust 项目组织结构
 
-未完，待续！
+这是一个 基于 Cargo 的项目的结构图：
+
+```
+.
+├── Cargo.toml
+├── Cargo.lock
+├── tests
+├── examples
+├── benches
+├── target
+    ├── debug
+    └── release
+└── src
+    ├── lib.rs
+    └── main.rs
+```
+
+Cargo.toml 和 Cargo.lock 位于项目的根目录下，是 Cargo 代码管理的核心，Cargo 工具的所有活动均基于这两个文件。
+
+外部测试源码文件位于 tests 目录下。
+
+示例程序源码文件位于 examples 目录下。
+
+基准测试源码文件位于 benches 目录下。
+
+target 目录下 debug 和 release 目录用于存放编译生成的中间文件和最终的可执行文件。
+
+#### Cargo.toml 和 Cargo.lock
+
+未完！待续
