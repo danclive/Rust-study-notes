@@ -167,4 +167,87 @@ fn print_name((name,_): (&str, i32)) {
 
 #### 函数返回值
 
-未完待续！
+在 Rust 中，任何函数都有放回类型，当函数返回时，会返回一个该类型的值。再来看看 `main` 函数：
+
+```rust
+fn main() {
+
+}
+```
+
+函数的返回值类型是在参数列表后，加上箭头 `->` 和类型来指定的。不过，一般我们看到的 `main` 函数的定义并没有这么做。这是因为 'main' 函数的返回值是 `()`, 在 Rust 中，当一个函数返回 `()` 时，可以省略。`main` 函数的完整形式如下：
+
+```rust
+fn main() -> () {
+
+}
+```
+
+`main` 函数的返回值类型是 `()`, 它是一个特殊的元组——一个没有元素的元组，称之为 `unit`，它表示一个函数没有任何信息需要返回。`()` 类型，类似于 C/C++、Java、C# 中的 `void` 类型。
+
+下面看一个有返回值的例子：
+
+```rust
+fn main() {
+  let a = 123;
+  println!("{}", inc(a));
+}
+
+fn inc(n: i32) -> i32 {
+  n + 1
+}
+```
+
+这个例子中，`inc` 函数有一个 `i32` 类型的参数和返回值，作用是将参数加 1 返回。需要注意的是 `inc` 函数中只有一个 `n + 1` 一个表达式，并没有像 C/C++ 等语言有显示的 `return` 语句返回一个值。这是因为，与其他语言不同，Rust 是基于表达式的语言，函数中最后一个表达式的值，默认作为返回值（注意：没有分号 `:`）。稍后会介绍语句和表达式。
+
+##### return 关键字
+
+Rust 也有 `return` 关键字，不过一般用于提早返回。看这个例子：
+
+```rust
+fn main() {
+  let a = [1, 2, 3, 4, 8, 9];
+  println!("There is 7 in the array: {}", find(7, &a));
+  println!("There is 8 in the array: {}", find(8, &a));
+}
+
+fn find(n: i32, a: &[i32]) -> bool {
+  for i in a {
+    if *i == n {
+      return true;
+    }
+  }
+
+  false
+}
+```
+
+`find` 函数接受一个 `i32` 类型 `n` 和一个 `i32` 类型的切片(`slice`)`a` ，返回一个 `bool` 值，若 `n` 是 `a` 的元素，则返回 'true'，否则返回 `false`。可以看到，`return` 关键字，用在 `for` 循环 `if` 表达式中，若此时 `a` 的元素与 `n` 相等，则立刻返回 `true`，剩下的循环不必再进行，否则一直循环检测完整个切片(`slice`)，最后返回 `false`。
+
+不过，`return` 语句也可以用在最后返回，把 `find` 函数最后一句 `false` 改为 `return false;` （注意分号不可以省略）也是可以的：
+
+```rust
+fn main() {
+  let a = [1, 2, 3, 4, 8, 9];
+  println!("There is 7 in the array: {}", find(7, &a));
+  println!("There is 8 in the array: {}", find(8, &a));
+}
+
+fn find(n: i32, a: &[i32]) -> bool {
+  for i in a {
+    if *i == n {
+      return true;
+    }
+  }
+
+  return false;
+}
+```
+
+不过这是一个糟糕的风格，不是 Rust 的编程风格了。
+
+需要注意的是，`for` 循环中的 `i` ，其类型为 `&i32`，需要使用解引用来变换为 `i32` 类型。切片（`slice`）可以看作是对数组的引用，后面的章节中会详细介绍切片（`slice`）。
+
+##### 返回多个值
+
+未完，待续~
