@@ -113,22 +113,22 @@ error: Could not compile `hello_world`.
 
 ```rust
 fn main() {
-  let xm = "xiaoming";
-  let xh = "xiaohong";
-  say_what(xm, hi);
-  say_what(xh, hello);
+    let xm = "xiaoming";
+    let xh = "xiaohong";
+    say_what(xm, hi);
+    say_what(xh, hello);
 }
 
 fn hi(name: &str) {
-  println!("Hi, {}.", name);
+    println!("Hi, {}.", name);
 }
 
 fn hello(name: &str) {
-  println!("Hello, {}.", name);
+    println!("Hello, {}.", name);
 }
 
 fn say_what(name: &str, func: fn(&str)) {
-  func(name)
+    func(name)
 }
 ```
 
@@ -140,26 +140,26 @@ fn say_what(name: &str, func: fn(&str)) {
 
 ```rust
 fn main() {
-  let xm = ("xiaoming", 54);
-  let xh = ("xiaohong", 66);
-  print_id(xm);
-  print_id(xh);
-  print_name(xm);
-  print_age(xh);
-  print_name(xm);
-  print_age(xh);
+    let xm = ("xiaoming", 54);
+    let xh = ("xiaohong", 66);
+    print_id(xm);
+    print_id(xh);
+    print_name(xm);
+    print_age(xh);
+    print_name(xm);
+    print_age(xh);
 }
 
 fn print_id((name, age): (&str, i32)) {
-  println!("I'm {},age {}.", name, age);
+    println!("I'm {},age {}.", name, age);
 }
 
 fn print_age((_, age): (&str, i32)) {
-  println!("My age is  {}", age);
+    println!("My age is  {}", age);
 }
 
 fn print_name((name,_): (&str, i32)) {
-  println!("I am  {}", name);
+    println!("I am  {}", name);
 }
 ```
 
@@ -189,12 +189,12 @@ fn main() -> () {
 
 ```rust
 fn main() {
-  let a = 123;
-  println!("{}", inc(a));
+    let a = 123;
+    println!("{}", inc(a));
 }
 
 fn inc(n: i32) -> i32 {
-  n + 1
+    n + 1
 }
 ```
 
@@ -206,19 +206,19 @@ Rust 也有 `return` 关键字，不过一般用于提早返回。看这个例�
 
 ```rust
 fn main() {
-  let a = [1, 2, 3, 4, 8, 9];
-  println!("There is 7 in the array: {}", find(7, &a));
-  println!("There is 8 in the array: {}", find(8, &a));
+    let a = [1, 2, 3, 4, 8, 9];
+    println!("There is 7 in the array: {}", find(7, &a));
+    println!("There is 8 in the array: {}", find(8, &a));
 }
 
 fn find(n: i32, a: &[i32]) -> bool {
-  for i in a {
-    if *i == n {
-      return true;
+    for i in a {
+        if *i == n {
+          return true;
+        }
     }
-  }
 
-  false
+    false
 }
 ```
 
@@ -228,19 +228,19 @@ fn find(n: i32, a: &[i32]) -> bool {
 
 ```rust
 fn main() {
-  let a = [1, 2, 3, 4, 8, 9];
-  println!("There is 7 in the array: {}", find(7, &a));
-  println!("There is 8 in the array: {}", find(8, &a));
+    let a = [1, 2, 3, 4, 8, 9];
+    println!("There is 7 in the array: {}", find(7, &a));
+    println!("There is 8 in the array: {}", find(8, &a));
 }
 
 fn find(n: i32, a: &[i32]) -> bool {
-  for i in a {
-    if *i == n {
-      return true;
+    for i in a {
+        if *i == n {
+            return true;
+        }
     }
-  }
 
-  return false;
+    return false;
 }
 ```
 
@@ -254,13 +254,13 @@ Rust 函数不支持多个返回值，但是我们可以利用元组返回多个
 
 ```rust
 fn mian() {
-  let (p2, p3) = pow_2_3(456);
-  println!("pow 2 of 456 is {}.", p2);
-  println!("pow 3 of 456 is {}.", p3);
+    let (p2, p3) = pow_2_3(456);
+    println!("pow 2 of 456 is {}.", p2);
+    println!("pow 3 of 456 is {}.", p3);
 }
 
 fn pow_2_3(n: i32) -> (i32, i32) {
-  (n * n, n * n * n)
+    (n * n, n * n * n)
 }
 ```
 
@@ -272,12 +272,12 @@ fn pow_2_3(n: i32) -> (i32, i32) {
 
 ```rust
 fn main() {
-   let a = [1,2,3,4,5,6,7];
-   let mut b = Vec::<i32>::new();
-   for i in &a {
-       b.push(get_func(*i)(*i));
-   }
-   println!("{:?}", b);
+    let a = [1,2,3,4,5,6,7];
+    let mut b = Vec::<i32>::new();
+    for i in &a {
+        b.push(get_func(*i)(*i));
+    }
+    println!("{:?}", b);
 }
 
 fn get_func(n: i32) -> fn(i32) -> i32 {
@@ -299,16 +299,16 @@ fn get_func(n: i32) -> fn(i32) -> i32 {
 
 ```rust
 fn main() {
-  let f = get_func();
-  println!("{}", f(3));
+    let f = get_func();
+    println!("{}", f(3));
 }
 
 fn get_func() -> fn(i32)->i32 {
-  let a = 1;
-  fn inc(n:i32) -> i32 {
-    n + a
-  }
-  inc
+    let a = 1;
+    fn inc(n:i32) -> i32 {
+        n + a
+    }
+    inc
 }
 ```
 
@@ -331,14 +331,14 @@ error: Could not compile `hello_world`.
 
 ```rust
 fn main() {
-  let f = get_func();
-  println!("{}", f(3));
+    let f = get_func();
+    println!("{}", f(3));
 }
 
 fn get_func() -> Box<Fn(i32) -> i32> {
-  let a = 1;
-  let inc = move |n| n + a;
-  Box::new(inc)
+    let a = 1;
+    let inc = move |n| n + a;
+    Box::new(inc)
 }
 ```
 
@@ -360,13 +360,13 @@ fn diverges() -> ! {
 
 ```rust
 fn main() {
-  println!("hello");
-  diverging();
-  println!("world");
+    println!("hello");
+    diverging();
+    println!("world");
 }
 
 fn diverging() -> ! {
-  panic!("This function will never return");
+    panic!("This function will never return");
 }
 ```
 
@@ -397,7 +397,7 @@ error: process didn't exit successfully: `yourpath\hello_world\target\debug\hell
 
 ```rust
 fn diverges() -> ! {
-  panic!("This function never returns!");
+    panic!("This function never returns!");
 }
 let x: i32 = diverges();
 let x: String = diverges();
@@ -409,14 +409,14 @@ let x: String = diverges();
 
 ```rust
 fn inc(n: i32) -> i32 {
-  n + 1
+    n + 1
 }
 
 type IncType = fn(i32) -> i32;
 
 fn mian() {
-  let func: IncType = inc;
-  println!("3 + 1 = {}", func(3));
+    let func: IncType = inc;
+    println!("3 + 1 = {}", func(3));
 }
 ```
 
@@ -426,15 +426,15 @@ fn mian() {
 
 ```rust
 fn main() {
-  let func: IncType = inc;
-  println!("3 + 1 = {}", func(3));
-  println!("3 + 1 = {}", inc(3));
+    let func: IncType = inc;
+    println!("3 + 1 = {}", func(3));
+    println!("3 + 1 = {}", inc(3));
 }
 
 type IncType = fn(i32) -> i32;
 
 fn inc(n: i32) -> i32 {
-  n + 1
+    n + 1
 }
 ```
 
@@ -450,15 +450,15 @@ fn inc(n: i32) -> i32 {
 
 ```rust
 fn one(n: i32) -> i32 {
-  n + 1
+    n + 1
 }
 
 fn two(n: i32) -> i32 {
-  n + 2
+    n + 2
 }
 
 fn three(n: i32) -> i32 {
-  n + 3
+    n + 3
 }
 
 fn main() {
