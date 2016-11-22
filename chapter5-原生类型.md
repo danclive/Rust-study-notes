@@ -154,9 +154,143 @@ let b = 0o77777777; //16777215
 let c = 0xFFFFFF;  //16777215
 ```
 
-可以标准库中查看每种类型的详细说明：[i8](https://doc.rust-lang.org/std/primitive.i8.html)，[i16](https://doc.rust-lang.org/std/primitive.i16.html)，[i32](https://doc.rust-lang.org/std/primitive.i32.html)，[i64](https://doc.rust-lang.org/std/primitive.i64.html)，[u8](https://doc.rust-lang.org/std/primitive.u8.html)，[u16](https://doc.rust-lang.org/std/primitive.u16.html)，[u32](https://doc.rust-lang.org/std/primitive.u32.html)，[u64](https://doc.rust-lang.org/std/primitive.u64.html)，[isize](https://doc.rust-lang.org/std/primitive.isize.html)，[usize](https://doc.rust-lang.org/std/primitive.usize.html)，[f32](https://doc.rust-lang.org/std/primitive.f32.html)，[f64](https://doc.rust-lang.org/std/primitive.f64.html)。
+可以标准库文档中查看每种类型的详细说明：[i8](https://doc.rust-lang.org/std/primitive.i8.html)，[i16](https://doc.rust-lang.org/std/primitive.i16.html)，[i32](https://doc.rust-lang.org/std/primitive.i32.html)，[i64](https://doc.rust-lang.org/std/primitive.i64.html)，[u8](https://doc.rust-lang.org/std/primitive.u8.html)，[u16](https://doc.rust-lang.org/std/primitive.u16.html)，[u32](https://doc.rust-lang.org/std/primitive.u32.html)，[u64](https://doc.rust-lang.org/std/primitive.u64.html)，[isize](https://doc.rust-lang.org/std/primitive.isize.html)，[usize](https://doc.rust-lang.org/std/primitive.usize.html)，[f32](https://doc.rust-lang.org/std/primitive.f32.html)，[f64](https://doc.rust-lang.org/std/primitive.f64.html)。
 
-#### 数组
+#### 数组(array)
+
+数组是一组包含相同数据类型 `T` 的组合，并存储在连续的内存区中。数组使用中括号 `[]` 来创建，其大小在编译期间就已确定，数组的类型被标记为 `[T; size]`，表示一个拥有 `T` 类型，`size` 个元素的数组。数组的大小是固定的，但其中的元素可以被更改。
+
+```rust
+fn main() {
+    let mut array: [i32; 3] = [0; 3]; // 0, 0, 0
+
+    array[1] = 1;
+    array[2] = 2;
+
+    println!("{:?}", array); // 0, 1, 2
+}
+```
+
+可以用 `array.len()` 获取数组的元素数量：
+
+```rust
+fn main() {
+    let array = [0; 20];
+    println!("{:?}", array.len()); // 20
+}
+```
+
+可以使用下标访问特定元素：
+
+```rust
+fn main() {
+    let names = ["Graydon", "Brian", "Niko"]; // names: [&str, 3]
+    println!("The second name is: {}", names[1]); // Brian
+}
+```
+
+跟大部分编程语言一样，下标从0开始，所以第一个元素是 `names[0]`, 第二个是 `names[1`。如果你尝试使用一个不存在于数组中的下标，将会得到一个错误，数组访问会在运行时进行边界检查。
+
+可以在[标准库文档](https://doc.rust-lang.org/std/primitive.array.html)中查看更多 `array` 的详细说明。
+
+#### 切片（slice）
+
+切片是一个数组的引用（或者“视图”）。它有利于安全，有效的访问数组的一部分而不用进行拷贝。比如，你可能只想要引用读入到内存文件中的一行。原理上，切片并不是直接创建的，而是引用一个已经存在的变量。片段有预定义长度，可以是可变的也可以是不可变的，但是其范围不能超过数组的大小。
+
+在底层，切片代表一个指向数据开始的指针和一个长度。
+
+一个切片的表达式可以为 `[T]` 或 `&mut [T]`。
+
+```rust
+let array = [1, 2, 3, 4, 5, 6];
+let slice_complete = &array[..]; // 获取全部元素
+let slice_middle = &array[1..4]; // 获取中间元素，取得的 Slice 为 [2, 3, 4]。切片遵循左闭右开原则。
+let slice_right = &array[1..]; // [2, 3, 4, 5, 6]
+let slice_left = &array[..3]; // [1, 2, 3]
+```
+
+可以在[标准库文档](https://doc.rust-lang.org/std/primitive.slice.html)中查看更多切片的说明。
+
+#### 元组（tuples）
+
+元组是固定大小的有序列表，使用括号 `()` 来构成，每个元组的值都是 `(T1, T2, ...)`类型标记的形式，其中 `T1, T2` 是每个元素的类型。 如下：
+
+```rust
+let x = (1, "hello", "world");
+```
+
+这是一个长度为3的元组，下面是同样的元组，不过注明了数据类型：
+
+```rust
+let x: (i32, &str, &str) = (1, "hello", "world");
+```
+
+如你所见，元组的类型跟元组看起来很像，只不过类型取代值的位置。
+
+可以把一个元组赋值给另一个，如果他们包含相同的类型和数量。当元组有相同的长度时他们后相同的数量。
+
+```rust
+let mut x = (1, 2); // x: (i32, i32)
+let y = (2, 3); // y: (i32, i32)
+
+x = y;
+```
+
+可以通过一个`let` “解构”访问元组中的字段：
+
+```rust
+let (x, y, z) = (1, 2, 3);
+
+println!("x is {}", x);
+```
+
+我们可以在 `let` 左侧写一个模式，如果能匹配右侧的话，可以一次写多个绑定。这种情况下，`let` “解构” 或 “拆开” 了元组，并分成了三个绑定。这个模式时很强大的。
+
+可以用一个逗号来消除一个单元素元组和一个括号中的值的歧义：
+
+```rust
+(0, );
+(0);
+```
+
+可以用索引访问一个元组中的字段：
+
+```rust
+let tuple = (1, 2, 3);
+
+let x = tuple.0; // 1
+let y = tuple.1; // 2
+let x = tuple.2; // 3
+```
+
+就像数组索引，元组索引从 `0` 开始，不过也不像数组索引，它使用 `.`, 而不是 `[]`。
+
+函数可以利用元组来放回多个值，因为元组可以拥有任意数量、不同类型的值。
+
+```rust
+fn mian() {
+    let (p2, p3) = pow_2_3(456);
+    println!("pow 2 of 456 is {}.", p2);
+    println!("pow 3 of 456 is {}.", p3);
+}
+
+fn pow_2_3(n: i32) -> (i32, i32) {
+    (n * n, n * n * n)
+}
+```
+
+可以在[标准库文档](https://doc.rust-lang.org/std/primitive.tuple.html)中查看更多元组的说明。
+
+#### str
 
 未完，待续！
+
+
+
+
+
+
+
+
+
 
