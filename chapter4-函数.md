@@ -32,6 +32,91 @@ fn add(x: i32, y: i32) -> i32 {
 
 `add` 函数可以将两个数值加起来并将结果返回。
 
+#### 语句和表达式
+
+Rust 主要是一个基于表达式的语言。只有两种语句，其他的一切都是表达式。
+
+这又有什么区别的？表达是返回一个值，而语句不是。这就是为甚恶魔这里我们以“不是所有控制路劲都返回一个值”结束：`x + 1;` 语句不返回一个值。Rust 中有两种类型的语句：“声明语句”和“表达式语句”。其余一切都是表达式。
+
+##### 声明语句
+
+在一些语言中，变量绑定可以被写成一个表达式，不仅仅是语句。例如 Ruby：
+
+```ruby
+x = y = 5
+```
+
+然而，在 Rust 中，使用 `let` 引入一个绑定并不是一个表达式。下面的代码会产生一个编译时错误：
+
+```rust
+let x = (let y = 5); 
+```
+
+```
+    Blocking waiting for file lock on build directory
+   Compiling hello_world v0.1.0 (yourpath/hello_world)
+error: expected expression, found statement (`let`)
+ --> main.rs:2:14
+  |
+2 |     let x = (let y = 5);
+  |              ^^^
+  |
+  = note: variable declaration using `let` is a statement
+
+error: aborting due to previous error
+
+error: Could not compile `hello_world`.
+```
+
+编译器告诉我们这里它期望看到表达式的开头，而 `let` 只能开始一个语句，不是一个表达式。
+
+注意赋值一个已经绑定过的变量（例如 `y = 5`）仍然时一个表达式，即使它的（返回）值并不是特别有用。不像其他语言中赋值语句返回它赋的值（例如，前面例子中的 `5` ），在 Rust 中赋值的值是一个空元组 `()`:
+
+```rust
+let mut y = 5;
+
+let x = (y = 6); // x has the value `()`, not `6`
+```
+
+##### 表达式语句
+
+表达式语句的目的是把任何表达式变为语句。在实践中，Rust 语法期望语句后面跟其他语句。这意味着用分号来分隔各个表达式。着意味着 Rust 看起来很像大部分其他使用分号作为语句结尾的语言，并且你会看到分号出现在几乎每一行 Rust 代码。
+
+那么我们说“几乎”的例外是什么呢？比如：
+
+```rust
+fn add_one(x: i32) -> i32 {
+    x + 1;
+}
+```
+
+我们的函数声称它返回一个 `i32`，不过带有一个分号的话，它将返回一个 `()`。Rust 意识到这可能不是我们想要的，并在我们看到的错误中建议我们去掉分号：
+
+```
+   Compiling hello_world v0.1.0 (yourpath/hello_world)
+error[E0269]: not all control paths return a value
+ --> main.rs:1:1
+  |
+1 | fn add_one(x: i32) -> i32 {
+  | ^
+  |
+help: consider removing this semicolon:
+ --> main.rs:2:10
+  |
+2 |     x + 1;
+  |          ^
+
+error: aborting due to previous error
+
+error: Could not compile `hello_world`.
+```
+
+```rust
+fn add_one(x: i32) -> i32 {
+    x + 1
+}
+```
+
 #### 函数参数
 
 ##### 参数声明
