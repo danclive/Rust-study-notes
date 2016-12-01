@@ -165,7 +165,110 @@ v2.truncate(2);
 
 也许还会有疑问，move 后，`v` 和 `v2` 离开作用域，会不会有“Double Free”的问题？不过，Rust 规定，只有资源的所有者销毁后才释放内存，而无论这个资源是否被多次 move，同一时刻只有一个所有者（Owner），所以该资源的内存也只会被 free 一次。
 
+#### Copy 类型
 
+我们已经知道了当所有权被转移给另一个绑定以后，不能再使用原始绑定。然而，有一个叫做 `Copy` 的 trait 会改变这个行为。例如：
 
+```rust
+let v = 1;
+let v2 = v;
+println!("v is: {}", v);
+```
+
+这段代码没有问题，是因为 `v` 是一个 `i32`，它实现了 `Copy`。这意味这，就像一个移动，当我们把 `v` 赋值给 `v2`，产生了一个数据的拷贝。不过，不像一个移动，我们仍可以在之后使用 `v`。这是因为 `132` 并没有指向其他数据的指针，对它的拷贝是一个完整的拷贝。
+
+所有基本类型都实现了 `Copy` trait，因此他们的所有权并不像你想象的那样遵循“所有权规则”被移动。作为一个例子，如下两段代码能够编译是因为 `i32` 和 `bool` 类型实现了 `Copy` trait。
+
+```rust
+fn main() {
+    let a = 5;
+
+    let _y = double(a);
+    println!("{}", a);
+}
+
+fn double(x: i32) -> i32 {
+    x * 2
+}
+```
+
+```rust
+fn main() {
+    let a = true;
+
+    let _y = change_truth(a);
+    println!("{}", a);
+}
+
+fn change_truth(x: bool) -> bool {
+    !x
+}
+```
+
+如果使用了没有实现 `Copy` trait 的类型，会得到一个编译错误，因为我们尝试使用一个移动了的值。
+
+```
+error: use of moved value: `a`
+println!("{}", a);
+```
+
+在[标准库文档](https://doc.rust-lang.org/std/marker/trait.Copy.html)中也有对 `Copy` trait 的介绍。
+
+一旦一种类型实现了 `Copy` tarit，这就意味这这种类型可以通过简单的位拷贝实现拷贝。从前面的知识我们知道“绑定”存在 move 语义（所有权转移），但是，一旦这种类型实现了 `Copy` tarit，会先拷贝内容到新的内存区域，然后将新内存区域跟这个标识符做绑定。
+
+也可以给自定义类型实现 `Copy` tarit，只要这种类型的属性类型都实现了 `Copy` tarit，这个类型就可以实现 `Copy` tarit。例如：
+
+```rust
+// 可实现
+struct Foo {
+    a: i32,
+    b: bool,
+}
+
+// 不可实现
+struct Bar {
+    l: Vec<i32>,
+}
+```
+
+因为 `Foo` 的属性 `a` 和 `b` 的类型 `i32` 和 `bool` 均实现了 `Copy` tarit，所以 `Foo` 可以实现 `Copy` tarit。但对于 `Bar` 来说，它的属性 `l` 是 `Vec<T>` 类型，这种类型并没有实现 `Copy` tarit，所以 `Bar` 无法实现 `Copy` tarit。
+
+有两种方法为自定义类型实现 `Copy` tarit。
+
+1. 通过 `derive` 让编译器自动实现
+
+```rust
+#[derive(Copy, Clone)]
+struct Foo {
+    a: i32,
+    b: bool,
+}
+```
+
+2. 手动实现
+
+```rust
+#[derive(Debug)]
+struct Foo {
+   a: i32,
+   b: bool,
+}
+impl Copy for Foo {}
+impl Clone for Foo {
+    fn clone(&self) -> Foo {
+        Foo{a: self.a, b: self.b}
+    }
+}
+fn main() {
+    let x = Foo{ a: 100, b: true};
+    let mut y = x;
+    y.b = false;
+
+    println!("{:?}", x);  //打印：Foo { a: 100, b: true }
+    println!("{:?}", y);  //打印：Foo { a: 100, b: false }
+ }
+```
+
+ 
 
 
