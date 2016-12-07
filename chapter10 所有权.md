@@ -269,6 +269,39 @@ fn main() {
  }
 ```
 
+#### 所有权之外
+
+我们不得不在每个函数中交还所有权：
+
+```rust
+fn foo(v: Vec<i32>) -> Vec<i32> {
+    // do something
+    v
+}
+```
+
+这将会变得烦人。它在我们获取更多变量的所有权时变得更糟：
+
+```rust
+fn foo(v1: Vec<i32>, v2: Vec<i32>) -> (Vec<i32>, Vec<i32>, i32) {
+    // do stuff with v1 and v2
+
+    // hand back ownership, and the result of our function
+    (v1, v2, 42)
+}
+
+let v1 = vec![1, 2, 3];
+let v2 = vec![1, 2, 3];
+
+let (v1, v2, answer) = foo(v1, v2);
+```
+
+返回值，返回的代码，和函数调用都变得更复杂了。
+
+幸运的时，Rust 提供了一个 trait，借用，它帮助我们解决了这个问题。在下一章将讨论这一部分。
+
+
+
  
 
 
