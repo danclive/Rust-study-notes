@@ -255,4 +255,85 @@ fn new<'a>(buf: &'a mut [u8]) -> BufWriter<'a>;
 
 #### 生命周期推导
 
-未完待续~
+要推导生命周期是否合法，先明确两点：
+
+- 输出值（返回值）依赖哪些输入值
+- 输入值的生命周期大于或等于输出值的生命周期（准确来说，子集，而不是大于或等于）
+
+生命周期推导公式：当输出值 R 依赖输入值 X, Y, Z...,当且仅当输出值的生命周期为所有输入值的生命周期的子集时，生命周期合法。
+
+```
+Lifetime(R) ⊆ ( Lifetime(X) ∩ Lifetime(Y) ∩ Lifetime(Z) ∩ Lifetime(...) )
+```
+
+比如：
+
+```rust
+fn foo<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if true {
+        x
+    } else {
+        y
+    }
+}
+```
+
+因为返回值同时依赖输入参数 `x` 和 `y`, 所以：
+
+```
+Lifetime(返回值) ⊆ ( Lifetime(x) ∩ Lifetime(y) )
+
+即：
+
+'a ⊆ ('a ∩ 'a)  // 成立
+```
+
+再比如：
+
+```rust
+fn foo<'a, 'b>(x: &'a str, y: &'b str) -> &'a str {
+    if true {
+        x
+    } else {
+        y
+    }
+}
+```
+
+这段代码会编译错误，编译器无法推导返回值的生命周期。
+
+因为返回值同时依赖 `x` 和 `y`，所以：
+
+```
+Lifetime(返回值) ⊆ ( Lifetime(x) ∩ Lifetime(y) )
+
+即：
+
+'a ⊆ ('a ∩ 'b)  //不成立
+```
+
+这种情况下，可以显式地告诉编译器 `'b` 比 `'a` 长（`'a` 是 `'b` 的子集），只需要定义生命周期的时候，在 `'b` 的后面加上 `: 'a`，意思是 `'b` 比 `'a` 长，`'a` 是 `'b` 的子集：
+
+```rust
+fn foo<'a, 'b: 'a>(x: &'a str, y: &'b str) -> &'a str {
+    if true {
+        x
+    } else {
+        y
+    }
+}
+```
+
+这样就可以编译通过，因为：
+
+```
+条件：Lifetime(x) ⊆ Lifetime(y)
+推导：Lifetime(返回值) ⊆ ( Lifetime(x) ∩ Lifetime(y) )
+
+即：
+
+条件： 'a ⊆ 'b
+推导：'a ⊆ ('a ∩ 'b) // 成立
+```
+
+
