@@ -18,12 +18,12 @@ Rust 通过所有权/借用、生命周期、类型系统做到了内存安全�
 的确，在学习 Rust 初期，你可能会时时与编译器对抗，被编译器折磨得死去活来，经常会有摔了电脑的冲动。但是，你一旦适应这套规则，即使去写其他语言，写出来的代码也会更加高效 —— 这套规则促使你先吧问题想清楚了再去编码，使你编写出更加严谨的代码。
 
 1. [安装](chapter1-安装.md)
-2. [使用 Cargo](chapter2-使用 Cargo.md)
+2. [使用 Cargo](chapter2-使用%20Cargo.md)
 3. [变量绑定](chapter3-变量绑定.md)
 4. [函数](chapter4-函数.md)
 5. [原生类型](chapter5-原生类型.md)
 6. [运算符](chapter6-运算符.md)
-7. [if 语句](chapter7-if 语句.md)
+7. [if 语句](chapter7-if%20语句.md)
 8. [循环](chapter8-循环.md)
 9. [Vectors](chapter9-Vectors.md)
 10. [所有权](chapter10-所有权.md)
